@@ -71,11 +71,11 @@ def evaluate(y_pred, y_test):
     return perf
 
 
-def GridSearch(clf, X_train, y_train):
+def GridSearch(clf, X_train, y_train, X_test):
     print("Test0")
     clf.fit(X_train, y_train)
     print("test")
-    clf.grid_scores_
+    print(clf.cv_results_)
     print("Best parameters:%s" % clf.best_params_)
     print("Cross Validation score: %s" % clf.best_score_)
             
@@ -91,8 +91,8 @@ def multiGridSearch(classifiers,classNames, parameters, crossVal, Nlist,train_se
         classif= classifiers[i]
         className=classNames[i]
         param=parameters[i]
-        if __name__ == "__main__" :
-            results=[]
+
+        results=[]
 
         print("Evaluating performance for classifier: %s" % className)
         
@@ -106,12 +106,12 @@ def multiGridSearch(classifiers,classNames, parameters, crossVal, Nlist,train_se
             if parallel:
                 if __name__ == "__main__" :
                     clf=GridSearchCV(classif,param,scoring=scorer,cv=crossVal, verbose=1, n_jobs=-1)
-                    y_pred= GridSearch(clf, X_train, y_train)
+                    y_pred= GridSearch(clf, X_train, y_train, X_test)
                     perf = evaluate(y_pred,y_test)
                     results.append(perf)
             else:
                 clf=GridSearchCV(classif,param,scoring=scorer,cv=crossVal, verbose=1)
-                y_pred= GridSearch(clf, X_train, y_train)
+                y_pred= GridSearch(clf, X_train, y_train, X_test)
                 perf = evaluate(y_pred,y_test)
                 results.append(perf)
 

@@ -9,7 +9,7 @@ from handling import multiGridSearch
 from sklearn.model_selection import StratifiedKFold
 from matplotlib import *
 from sklearn.ensemble import RandomForestClassifier
-Nlist=linspace(5000,50000,51)
+Nlist=linspace(50000,50000,3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    )
 train_set_fraction=0.2    
     
 skf= StratifiedKFold(n_splits=5)
@@ -21,7 +21,7 @@ parameters=[
             {"n_estimators":[5,15]}
             ]
             
-results=multiGridSearch(classifiers,classNames, parameters,skf,Nlist,train_set_fraction,plotResults=False, impute_scale=True)
+results=multiGridSearch(classifiers,classNames, parameters,skf,Nlist,train_set_fraction,plotResults=False, impute_scale=True, parallel=True)
 
 for i in range(len(results)):
     plot(Nlist, results[i])
