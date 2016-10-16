@@ -4,24 +4,22 @@
 from pandas import *
 from numpy import *
 from scipy import *
-from math import sqrt
-import matplotlib.pyplot as plt
-from sklearn.tests.test_cross_validation import train_test_split_pandas
+from matplotlib import *
 from sklearn.preprocessing.data import StandardScaler
 from sklearn.preprocessing import Imputer
-from sklearn.cross_validation import train_test_split
-from sklearn.linear_model.stochastic_gradient import SGDClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV , validation_curve
+from sklearn.metrics.scorer import make_scorer
+from sklearn.model_selection import GridSearchCV ,train_test_split
 from sklearn.metrics.classification import matthews_corrcoef, confusion_matrix
-from numpy import linspace
+from numpy import *
 from matplotlib.pyplot import plot, show
 
+trainPath="/home/anog/Documents/Info/P3A/Data/Training/train_numeric.csv"
+testPath="/home/anog/Documents/Info/P3A/Data/Test/test_numeric.csv"
 def importData(filename,N,testSize):
-    data= read_csv(filename,nrows=N, testSize)
+    data= read_csv(filename,nrows=N)
     y=data["Response"]
     X=data.drop("Response",axis=1)
-    X_train, X_test, y_train, y_test= train_test_split(X,y,testSize)
+    X_train, X_test, y_train, y_test= train_test_split(X,y,test_size=testSize)
     
     test_id= X_test["Id"]
     X_test= X_test.drop("Id", axis=1)
@@ -73,9 +71,10 @@ def evaluate(y_pred, y_test):
     return perf
 
 
-def GridSearch(classifier,parameters,scorer,crossVal,X_train,X_test,y_train):
-    clf=GridSearchCV(classifier,parameters,scoring=scorer,cv=crossVal, verbose=1, n_jobs=-1)
+def GridSearch(clf, X_train, y_train):
+    print("Test0")
     clf.fit(X_train, y_train)
+    print("test")
     clf.grid_scores_
     print("Best parameters:%s" % clf.best_params_)
     print("Cross Validation score: %s" % clf.best_score_)
@@ -85,7 +84,7 @@ def GridSearch(classifier,parameters,scorer,crossVal,X_train,X_test,y_train):
     return y_pred
 
 
-def multiGridSearch(classifiers,classNames, parameters, crossVal, Nlist,plotResults=False, impute_scale= True)):
+def multiGridSearch(classifiers,classNames, parameters, crossVal, Nlist,train_set_fraction,plotResults=False, impute_scale= True, parallel=False):
     allResults=[]
     scorer=make_scorer(matthews_corrcoef)
     for i in range(len(classifiers)):
@@ -100,27 +99,31 @@ def multiGridSearch(classifiers,classNames, parameters, crossVal, Nlist,plotResu
         for N in Nlist:
 
             print("N=%s" % N)
-            X_train, y_train, X_test, y_test, test_id = importData("Train/train_numeric.csv",N,train_set_fraction)
+            X_train, y_train, X_test, y_test, test_id = importData(trainPath,N,train_set_fraction)
             
             if impute_scale:
                 X_train, X_test= imputeAndScale(X_train,X_test)
-
-            if __name__ == "__main__" :
-                y_pred= GridSearch(classif,param,scorer,crossVal,X_train,X_test,y_train)
-                
+            if parallel:
+                if __name__ == "__main__" :
+                    clf=GridSearchCV(classif,param,scoring=scorer,cv=crossVal, verbose=1, n_jobs=-1)
+                    y_pred= GridSearch(clf, X_train, y_train)
+                    perf = evaluate(y_pred,y_test)
+                    results.append(perf)
+            else:
+                clf=GridSearchCV(classif,param,scoring=scorer,cv=crossVal, verbose=1)
+                y_pred= GridSearch(clf, X_train, y_train)
                 perf = evaluate(y_pred,y_test)
-                
                 results.append(perf)
-            del data
+
             del X_test
             del X_train
             del y_train
             del y_test
-        if  __name__ == "__main__" :
-            allResults.append(results)
-            if plotResults:
-                plot(Nlist,results)
-                show()
+       
+        allResults.append(results)
+        if plotResults:
+            plot(Nlist,results)
+            show()
         print("_" * 10)
         print("\n"*5)
     return allResults
