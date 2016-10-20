@@ -13,8 +13,6 @@ from sklearn.metrics.classification import matthews_corrcoef, confusion_matrix
 from numpy import *
 from matplotlib.pyplot import plot, show
 
-trainPath="/home/anog/Documents/Info/P3A/Data/Training/train_numeric.csv"
-testPath="/home/anog/Documents/Info/P3A/Data/Test/test_numeric.csv"
 def importData(filename,N,testSize):
     data= read_csv(filename,nrows=N)
     y=data["Response"]
@@ -72,10 +70,7 @@ def evaluate(y_pred, y_test):
 
 
 def GridSearch(clf, X_train, y_train, X_test):
-    print("Test0")
     clf.fit(X_train, y_train)
-    print("test")
-    print(clf.cv_results_)
     print("Best parameters:%s" % clf.best_params_)
     print("Cross Validation score: %s" % clf.best_score_)
             
@@ -84,7 +79,7 @@ def GridSearch(clf, X_train, y_train, X_test):
     return y_pred
 
 
-def multiGridSearch(classifiers,classNames, parameters, crossVal, Nlist,train_set_fraction,plotResults=False, impute_scale= True, parallel=False):
+def multiGridSearch(filename,classifiers,classNames, parameters, crossVal, Nlist,test_set_fraction,plotResults=False, impute_scale= True, parallel=False):
     allResults=[]
     scorer=make_scorer(matthews_corrcoef)
     for i in range(len(classifiers)):
@@ -99,8 +94,7 @@ def multiGridSearch(classifiers,classNames, parameters, crossVal, Nlist,train_se
         for N in Nlist:
 
             print("N=%s" % N)
-            X_train, y_train, X_test, y_test, test_id = importData(trainPath,N,train_set_fraction)
-            
+            X_train, y_train, X_test, y_test, test_id = importData(filename,N,test_set_fraction)
             if impute_scale:
                 X_train, X_test= imputeAndScale(X_train,X_test)
             if parallel:
