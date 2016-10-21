@@ -1,13 +1,14 @@
 ﻿# coding: utf-8
 #Autorise les accents dans les commentaires
-from globalVar import disp
 
 from pandas import *
 from numpy import *
 from scipy import *
-if disp:
+try:
     from matplotlib import *
     from matplotlib.pyplot import plot, show
+except ImportError :
+    print("Not importing matplotlib")
 from sklearn.preprocessing.data import StandardScaler
 from sklearn.preprocessing import Imputer
 from sklearn.metrics.scorer import make_scorer
