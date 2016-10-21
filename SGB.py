@@ -3,14 +3,16 @@ Created on Oct 9, 2016
 
 @author: ogier
 '''
+from globalVar import trainPath, testPath, parall, disp
+
 from numpy import linspace
 from sklearn.linear_model.stochastic_gradient import SGDClassifier
 from handling import multiGridSearch
 from sklearn.model_selection import StratifiedKFold
-import matplotlib.pyplot as plt
+if disp:
+    import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 
-from globalVar import trainPath, testPath, parall
 
 Nlist= linspace(50000, 50000, 15 )
 test_set_fraction=0.4  
