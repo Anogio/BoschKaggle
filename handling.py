@@ -1,5 +1,6 @@
 ﻿# coding: utf-8
 #Autorise les accents dans les commentaires
+from globalVar import disp
 
 from pandas import *
 from numpy import *
