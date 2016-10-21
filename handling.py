@@ -4,14 +4,15 @@
 from pandas import *
 from numpy import *
 from scipy import *
-from matplotlib import *
+if disp:
+    from matplotlib import *
+    from matplotlib.pyplot import plot, show
 from sklearn.preprocessing.data import StandardScaler
 from sklearn.preprocessing import Imputer
 from sklearn.metrics.scorer import make_scorer
 from sklearn.model_selection import GridSearchCV ,train_test_split
 from sklearn.metrics.classification import matthews_corrcoef, confusion_matrix
 from numpy import *
-from matplotlib.pyplot import plot, show
 
 def importData(filename,N,testSize):
     data= read_csv(filename,nrows=N)
