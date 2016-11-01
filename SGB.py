@@ -15,7 +15,7 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
 
 
-N = 50000
+N = 5000000
 nTests=15
 test_set_fraction=0.4 
     
@@ -43,7 +43,7 @@ classNames=["RandomForest"]
 #classifiers=[AdaBoostClassifier(base_estimator=bestEstim, n_estimators=100)]
 #results, Ada = clfSearch(trainPath, classifiers, classNames, N, nTests, test_set_fraction,impute_scale = True)
 
-classifiers=[RandomForestClassifier(class_weight="balanced",n_estimators=20, max_features=None, min_samples_leaf=45, min_samples_split=7)]
+classifiers=[RandomForestClassifier(class_weight="balanced",n_estimators=30, max_features=None, min_samples_leaf=45, min_samples_split=7)]
 results, Ada = clfSearch(trainPath, classifiers, classNames, N, nTests, test_set_fraction,impute_scale = True)
 
 

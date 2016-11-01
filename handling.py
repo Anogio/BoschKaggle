@@ -29,6 +29,22 @@ def importData(filename,N,testSize, split=True):
         return X_train, y_train, X_test, y_test, test_id
     else:
         return X,y
+        
+def importData_chunks(filename, N_fraction=0.05, test_fraction=0.2, split= True):
+    chunks = read_csv(filename,chunksize=50000, dtype=np.float32)
+    X= concat([c.sample(frac=N_fraction) for c in chunks])
+    y = X["Response"]
+    X = X.drop("Response",axis=1)
+    if split:
+        X_train, X_test, y_train, y_test= train_test_split(X,y,test_size=test_fraction)
+        
+        test_id= X_test["Id"]
+        X_test= X_test.drop("Id", axis=1)
+        X_train= X_train.drop("Id",axis=1)
+        
+        return X_train, y_train, X_test, y_test, test_id
+    else:
+        return X, y 
 
 def imputeAndScale(X_train,X_test):
     imp= Imputer()
@@ -103,7 +119,7 @@ def multiGridSearch(filename,classifiers,classNames, parameters, crossVal, Nrows
         print("Evaluating performance for classifier: %s" % className)
         for j in range(nTests) :
             print("Test number %d for %s:" % (j+1, className))
-            X_train, y_train, X_test, y_test, test_id = importData(filename,Nrows,test_set_fraction)
+            X_train, y_train, X_test, y_test, test_id = importData_chunks(filename,Nrows/1000000,test_set_fraction)
             if impute_scale:
                 X_train, X_test= imputeAndScale(X_train,X_test)
             if parallel:
@@ -153,7 +169,10 @@ def clfSearch(filename, classifiers, classNames, Nrows, nTests, test_set_fractio
         print("Evaluating performance for classifier: %s" % className)
         for j in range(nTests) :
             print("Test number %d for %s:" % (j+1, className))
-            X_train, y_train, X_test, y_test, test_id = importData(filename,Nrows,test_set_fraction)
+            X_train, y_train, X_test, y_test, test_id = importData_chunks(filename,0.1,test_set_fraction)
+            print(X_train.shape)
+            print(X_test.shape)
+            print(y_train.shape)
             if impute_scale:
                 X_train, X_test= imputeAndScale(X_train,X_test)
             classif.fit(X_train,y_train)
@@ -216,7 +235,8 @@ def test_feature(X_array, y_array, feature_array, classifier,nRows, n_tests, tes
     print(diff)
     print("With mean %d" % meanDiff)
         
-    
+def xgb_gridsearch():
+    clf= 1
         
         
         
