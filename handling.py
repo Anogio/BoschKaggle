@@ -108,7 +108,11 @@ def multiGridSearch(filename,classifiers,classNames, parameters, crossVal, Nlist
                     results.append(perf)
             else:
                 clf=GridSearchCV(classif,param,scoring=scorer,cv=crossVal, verbose=1)
+                print(X_train.shape)
+                print(y_train.shape)
+                print(X_test.shape)
                 y_pred= GridSearch(clf, X_train, y_train, X_test)
+                print(y_pred.shape)
                 perf = evaluate(y_pred,y_test)
                 results.append(perf)
 
