@@ -1,0 +1,317 @@
+N=100000
+Evaluating performance for classifier: SGD
+Test number 1 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0165304252124
+Prediction score:0.0294291529086
+True negatives:31896
+True positives: 81
+False negatives: 148
+False positives: 7875
+Ratio TP sur Nbre Pos:0.3537117903930131, Ratio TN sur Nbre N:0.8019914007694049, Ratio FP sur NTotal:0.196875, Ratio FN sur NTotal:0.0018606522340398784
+Test number 2 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0294224228711
+Prediction score:0.0238474081481
+True negatives:32001
+True positives: 78
+False negatives: 169
+False positives: 7752
+Ratio TP sur Nbre Pos:0.3157894736842105, Ratio TN sur Nbre N:0.8049958493698589, Ratio FP sur NTotal:0.1938, Ratio FN sur NTotal:0.002125625738937942
+Test number 3 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0186004449901
+Prediction score:0.0199292744711
+True negatives:32985
+True positives: 64
+False negatives: 175
+False positives: 6776
+Ratio TP sur Nbre Pos:0.26778242677824265, Ratio TN sur Nbre N:0.8295817509619979, Ratio FP sur NTotal:0.1694, Ratio FN sur NTotal:0.0022006488770403157
+Test number 4 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0128562399965
+Prediction score:0.022174607387
+True negatives:32656
+True positives: 61
+False negatives: 143
+False positives: 7140
+Ratio TP sur Nbre Pos:0.29901960784313725, Ratio TN sur Nbre N:0.8205849834154186, Ratio FP sur NTotal:0.1785, Ratio FN sur NTotal:0.001796662981204141
+Test number 5 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0233323723809
+Prediction score:0.0184604599078
+True negatives:27357
+True positives: 104
+False negatives: 143
+False positives: 12396
+Ratio TP sur Nbre Pos:0.42105263157894735, Ratio TN sur Nbre N:0.6881744773979322, Ratio FP sur NTotal:0.3099, Ratio FN sur NTotal:0.0017986063944859508
+Test number 6 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0204163300963
+Prediction score:0.028534193904
+True negatives:31455
+True positives: 84
+False negatives: 148
+False positives: 8313
+Ratio TP sur Nbre Pos:0.3620689655172414, Ratio TN sur Nbre N:0.7909625829812915, Ratio FP sur NTotal:0.207825, Ratio FN sur NTotal:0.0018607925970629653
+Test number 7 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0299928070785
+Prediction score:0.026527874805
+True negatives:32237
+True positives: 77
+False negatives: 160
+False positives: 7526
+Ratio TP sur Nbre Pos:0.32489451476793246, Ratio TN sur Nbre N:0.8107285667580414, Ratio FP sur NTotal:0.18815, Ratio FN sur NTotal:0.002011920629731157
+Test number 8 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0159300539388
+Prediction score:0.0230080247926
+True negatives:20570
+True positives: 141
+False negatives: 80
+False positives: 19209
+Ratio TP sur Nbre Pos:0.6380090497737556, Ratio TN sur Nbre N:0.5171070162648633, Ratio FP sur NTotal:0.480225, Ratio FN sur NTotal:0.0010055556952160687
+Test number 9 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0191350306287
+Prediction score:0.000372687339197
+True negatives:1
+True positives: 221
+False negatives: 0
+False positives: 39778
+Ratio TP sur Nbre Pos:1.0, Ratio TN sur Nbre N:2.513889238040172e-05, Ratio FP sur NTotal:0.99445, Ratio FN sur NTotal:0.0
+Test number 10 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0201439231607
+Prediction score:0.0216604270806
+True negatives:29906
+True positives: 84
+False negatives: 141
+False positives: 9869
+Ratio TP sur Nbre Pos:0.37333333333333335, Ratio TN sur Nbre N:0.7518793211816468, Ratio FP sur NTotal:0.246725, Ratio FN sur NTotal:0.0017724701445631678
+Test number 11 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0184640241543
+Prediction score:0.0204577665987
+True negatives:29661
+True positives: 80
+False negatives: 132
+False positives: 10127
+Ratio TP sur Nbre Pos:0.37735849056603776, Ratio TN sur Nbre N:0.7454760229214838, Ratio FP sur NTotal:0.253175, Ratio FN sur NTotal:0.0016587915954559163
+Test number 12 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0147890337171
+Prediction score:0.0210605923403
+True negatives:32425
+True positives: 69
+False negatives: 168
+False positives: 7338
+Ratio TP sur Nbre Pos:0.2911392405063291, Ratio TN sur Nbre N:0.8154565802379096, Ratio FP sur NTotal:0.18345, Ratio FN sur NTotal:0.002112516661217715
+Test number 13 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0198953473173
+Prediction score:0.0223549041006
+True negatives:34598
+True positives: 53
+False negatives: 178
+False positives: 5171
+Ratio TP sur Nbre Pos:0.22943722943722944, Ratio TN sur Nbre N:0.8699741004299831, Ratio FP sur NTotal:0.129275, Ratio FN sur NTotal:0.002237924011164475
+Test number 14 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0125648314551
+Prediction score:0.0245115783315
+True negatives:35044
+True positives: 47
+False negatives: 156
+False positives: 4753
+Ratio TP sur Nbre Pos:0.2315270935960591, Ratio TN sur Nbre N:0.8805688871020428, Ratio FP sur NTotal:0.118825, Ratio FN sur NTotal:0.001959946729652989
+Test number 15 for SGD:
+Fitting 5 folds for each of 1 candidates, totalling 5 fits
+Best parameters:{'alpha': 1, 'n_iter': 30}
+Cross Validation score: 0.0240742105693
+Prediction score:0.022873792344
+True negatives:29833
+True positives: 87
+False negatives: 141
+False positives: 9939
+Ratio TP sur Nbre Pos:0.3815789473684211, Ratio TN sur Nbre N:0.7501005732676255, Ratio FP sur NTotal:0.248475, Ratio FN sur NTotal:0.0017726038418988232
+__________
+
+
+
+
+
+
+Evaluating performance for classifier: Random Forest
+Test number 1 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 35, 'min_samples_split': 10, 'max_leaf_nodes': None, 'max_features': 45}
+Cross Validation score: 0.165728961015
+Prediction score:0.167471672156
+True negatives:39586
+True positives: 39
+False negatives: 187
+False positives: 188
+Ratio TP sur Nbre Pos:0.17256637168141592, Ratio TN sur Nbre N:0.9952732941117313, Ratio FP sur NTotal:0.0047, Ratio FN sur NTotal:0.002350781917835772
+Test number 2 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 35, 'min_samples_split': 5, 'max_leaf_nodes': None, 'max_features': 45}
+Cross Validation score: 0.161317589598
+Prediction score:0.148969508067
+True negatives:39545
+True positives: 38
+False negatives: 202
+False positives: 215
+Ratio TP sur Nbre Pos:0.15833333333333333, Ratio TN sur Nbre N:0.994592555331992, Ratio FP sur NTotal:0.005375, Ratio FN sur NTotal:0.002540241448692153
+Test number 3 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 35, 'min_samples_split': 10, 'max_leaf_nodes': None, 'max_features': 65}
+Cross Validation score: 0.168533106434
+Prediction score:0.18431728149
+True negatives:39541
+True positives: 48
+False negatives: 196
+False positives: 215
+Ratio TP sur Nbre Pos:0.19672131147540983, Ratio TN sur Nbre N:0.9945920112687393, Ratio FP sur NTotal:0.005375, Ratio FN sur NTotal:0.0024650367240165007
+Test number 4 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 35, 'min_samples_split': 5, 'max_leaf_nodes': None, 'max_features': None}
+Cross Validation score: 0.202509938487
+Prediction score:0.151296407293
+True negatives:39548
+True positives: 38
+False negatives: 175
+False positives: 239
+Ratio TP sur Nbre Pos:0.1784037558685446, Ratio TN sur Nbre N:0.9939930127931234, Ratio FP sur NTotal:0.005975, Ratio FN sur NTotal:0.00219921079749667
+Test number 5 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 60, 'min_samples_split': 5, 'max_leaf_nodes': None, 'max_features': 45}
+Cross Validation score: 0.164009472615
+Prediction score:0.187917425916
+True negatives:39547
+True positives: 48
+False negatives: 173
+False positives: 232
+Ratio TP sur Nbre Pos:0.2171945701357466, Ratio TN sur Nbre N:0.9941677769677468, Ratio FP sur NTotal:0.0058, Ratio FN sur NTotal:0.002174514190904749
+Test number 6 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 60, 'min_samples_split': 10, 'max_leaf_nodes': None, 'max_features': None}
+Cross Validation score: 0.208500935014
+Prediction score:0.147350458513
+True negatives:39405
+True positives: 48
+False negatives: 195
+False positives: 352
+Ratio TP sur Nbre Pos:0.19753086419753085, Ratio TN sur Nbre N:0.9911462132454663, Ratio FP sur NTotal:0.0088, Ratio FN sur NTotal:0.002452398319792741
+Test number 7 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 35, 'min_samples_split': 5, 'max_leaf_nodes': None, 'max_features': None}
+Cross Validation score: 0.188931091226
+Prediction score:0.145523540989
+True negatives:39503
+True positives: 40
+False negatives: 183
+False positives: 274
+Ratio TP sur Nbre Pos:0.17937219730941703, Ratio TN sur Nbre N:0.9931115971541343, Ratio FP sur NTotal:0.00685, Ratio FN sur NTotal:0.002300324308017196
+Test number 8 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 60, 'min_samples_split': 10, 'max_leaf_nodes': None, 'max_features': 65}
+Cross Validation score: 0.170246653648
+Prediction score:0.150895416277
+True negatives:39522
+True positives: 40
+False negatives: 179
+False positives: 259
+Ratio TP sur Nbre Pos:0.182648401826484, Ratio TN sur Nbre N:0.9934893542143234, Ratio FP sur NTotal:0.006475, Ratio FN sur NTotal:0.002249817752193258
+Test number 9 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 1, 'min_samples_split': 10, 'max_leaf_nodes': None, 'max_features': None}
+Cross Validation score: 0.175935317099
+Prediction score:0.111065663473
+True negatives:39770
+True positives: 10
+False negatives: 191
+False positives: 29
+Ratio TP sur Nbre Pos:0.04975124378109453, Ratio TN sur Nbre N:0.9992713384758412, Ratio FP sur NTotal:0.000725, Ratio FN sur NTotal:0.002399557777833614
+Test number 10 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 60, 'min_samples_split': 10, 'max_leaf_nodes': None, 'max_features': None}
+Cross Validation score: 0.178219011032
+Prediction score:0.190687609955
+True negatives:39510
+True positives: 53
+False negatives: 192
+False positives: 245
+Ratio TP sur Nbre Pos:0.2163265306122449, Ratio TN sur Nbre N:0.9938372531757012, Ratio FP sur NTotal:0.006125, Ratio FN sur NTotal:0.0024147905923783174
+Test number 11 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 35, 'min_samples_split': 5, 'max_leaf_nodes': None, 'max_features': 20}
+Cross Validation score: 0.166719564347
+Prediction score:0.155097443196
+True negatives:39585
+True positives: 36
+False negatives: 201
+False positives: 178
+Ratio TP sur Nbre Pos:0.1518987341772152, Ratio TN sur Nbre N:0.9955234765988482, Ratio FP sur NTotal:0.00445, Ratio FN sur NTotal:0.002527475291099766
+Test number 12 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 60, 'min_samples_split': 2, 'max_leaf_nodes': None, 'max_features': 65}
+Cross Validation score: 0.167463854051
+Prediction score:0.185597939498
+True negatives:39533
+True positives: 49
+False negatives: 184
+False positives: 234
+Ratio TP sur Nbre Pos:0.21030042918454936, Ratio TN sur Nbre N:0.9941157240928408, Ratio FP sur NTotal:0.00585, Ratio FN sur NTotal:0.002313475997686524
+Test number 13 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 35, 'min_samples_split': 10, 'max_leaf_nodes': None, 'max_features': 65}
+Cross Validation score: 0.186969168068
+Prediction score:0.140432252568
+True negatives:39578
+True positives: 33
+False negatives: 181
+False positives: 208
+Ratio TP sur Nbre Pos:0.1542056074766355, Ratio TN sur Nbre N:0.994772030362439, Ratio FP sur NTotal:0.0052, Ratio FN sur NTotal:0.0022746694817272406
+Test number 14 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 60, 'min_samples_split': 10, 'max_leaf_nodes': None, 'max_features': 65}
+Cross Validation score: 0.201310897814
+Prediction score:0.161514976805
+True negatives:39530
+True positives: 42
+False negatives: 168
+False positives: 260
+Ratio TP sur Nbre Pos:0.2, Ratio TN sur Nbre N:0.9934656948982157, Ratio FP sur NTotal:0.0065, Ratio FN sur NTotal:0.0021110831867303345
+Test number 15 for Random Forest:
+Fitting 5 folds for each of 108 candidates, totalling 540 fits
+Best parameters:{'n_estimators': 20, 'min_samples_leaf': 35, 'min_samples_split': 10, 'max_leaf_nodes': None, 'max_features': 65}
+Cross Validation score: 0.180587182268
+Prediction score:0.152084727592
+True negatives:39577
+True positives: 36
+False negatives: 186
+False positives: 201
+Ratio TP sur Nbre Pos:0.16216216216216217, Ratio TN sur Nbre N:0.9949469556036, Ratio FP sur NTotal:0.005025, Ratio FN sur NTotal:0.002337975765498517
+__________
+
+
+
+
+
+
