@@ -15,18 +15,20 @@ from sklearn.metrics.scorer import make_scorer
 from sklearn.model_selection import GridSearchCV ,train_test_split
 from sklearn.metrics.classification import matthews_corrcoef, confusion_matrix
 
+def splitData(X,y,testSize):
+    X_train, X_test, y_train, y_test= train_test_split(X,y,test_size=testSize)
+        
+    test_id= X_test["Id"]
+    X_test= X_test.drop("Id", axis=1)
+    X_train= X_train.drop("Id",axis=1)
+    
+    return X_train, y_train, X_test, y_test, test_id
 def importData(filename,N,testSize, split=True):
     data= read_csv(filename,nrows=N)
     y=data["Response"]
     X=data.drop("Response",axis=1)
     if split:
-        X_train, X_test, y_train, y_test= train_test_split(X,y,test_size=testSize)
-        
-        test_id= X_test["Id"]
-        X_test= X_test.drop("Id", axis=1)
-        X_train= X_train.drop("Id",axis=1)
-    
-        return X_train, y_train, X_test, y_test, test_id
+        return splitData(X,y,testSize)
     else:
         return X,y
         
@@ -89,7 +91,6 @@ def evaluate(y_pred, y_test):
     
     return perf
 
-
 def GridSearch(clf, X_train, y_train, X_test):
     clf.fit(X_train, y_train)
     print("Best parameters:%s" % clf.best_params_)
@@ -100,13 +101,13 @@ def GridSearch(clf, X_train, y_train, X_test):
     return y_pred
 
 
-def multiGridSearch(filename,classifiers,classNames, parameters, crossVal, Nrows,nTests,test_set_fraction,plotResults=False, impute_scale= True, parallel=False):
+def multiGridSearch(filename,classifiers,classNames, parameters, crossVal, Nfrac,nTests,test_set_fraction,plotResults=False, impute_scale= True, parallel=False):
     allResults=[]
     best=0
     bestEstim= None
     bestEstimName=None
     scorer=make_scorer(matthews_corrcoef)
-    print("Grid search on N=%s" % Nrows)
+    print("Grid search on %s fraction of dataset" % Nfrac)
     print("_" * 10)
     print("\n"*5)
     for i in range(len(classifiers)):
@@ -119,7 +120,7 @@ def multiGridSearch(filename,classifiers,classNames, parameters, crossVal, Nrows
         print("Evaluating performance for classifier: %s" % className)
         for j in range(nTests) :
             print("Test number %d for %s:" % (j+1, className))
-            X_train, y_train, X_test, y_test, test_id = importData_chunks(filename,Nrows/1000000,test_set_fraction)
+            X_train, y_train, X_test, y_test, test_id = importData_chunks(filename,Nfrac,test_set_fraction)
             if impute_scale:
                 X_train, X_test= imputeAndScale(X_train,X_test)
             if parallel:
@@ -156,12 +157,12 @@ def multiGridSearch(filename,classifiers,classNames, parameters, crossVal, Nrows
     print(bestEstim.best_params_)
     return allResults, bestEstim
 
-def clfSearch(filename, classifiers, classNames, Nrows, nTests, test_set_fraction,impute_scale = True):
+def clfSearch(filename, classifiers, classNames, Nfrac, nTests, test_set_fraction,impute_scale = True):
     allResults=[]
     best=0
     bestEstim= None
     bestEstimName=None
-    print("Classifier evaluation on N=%s" % Nrows)
+    print("Classifier evaluation on Nfrac=%s" % Nfrac)
     print("_" * 10)
     print("\n"*5)
     
@@ -173,7 +174,7 @@ def clfSearch(filename, classifiers, classNames, Nrows, nTests, test_set_fractio
         print("Evaluating performance for classifier: %s" % className)
         for j in range(nTests) :
             print("Test number %d for %s:" % (j+1, className))
-            X_train, y_train, X_test, y_test, test_id = importData_chunks(filename,0.1,test_set_fraction)
+            X_train, y_train, X_test, y_test, test_id = importData_chunks(filename,Nfrac,test_set_fraction)
             print(X_train.shape)
             print(X_test.shape)
             print(y_train.shape)
@@ -239,8 +240,8 @@ def test_feature(X_array, y_array, feature_array, classifier,nRows, n_tests, tes
     print(diff)
     print("With mean %d" % meanDiff)
         
-def xgb_gridsearch():
-    clf= 1
+
+    
         
         
         
