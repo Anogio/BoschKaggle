@@ -35,21 +35,22 @@ classifiers= [XGBClassifier()]
 classNames=["XGB"]
 
 #Version gourmande
-prameters=[
-           { "learning_rate" : [0.05] , "min_child_weight" : [1, 3,10], "max_depth" : [3,6,10],
-             "gamma" : [0,1] , "subsample":[0.5,1] , "colsample_bytree" : [0.25,0.5], "reg_lambda" : [0,1],
-             "scale_pos_weight" : [1,20,300]
-            }
-           ]
-           
-#Version diminuée
 parameters=[
            { "learning_rate" : [0.01,0.1,0.2,0.5] , "min_child_weight" : [1, 3,10], "max_depth" : [3,6,10,15],
              "gamma" : [0,0.1,1,10] , "subsample":[0.5,1] , "colsample_bytree" : [0.1,0.25,0.5,1], "reg_lambda" : [0,1,10],
              "scale_pos_weight" : [1,10,100,1000]
             }
            ]
-results, bestEstim =multiGridSearch(trainPath,classifiers,classNames, parameters,skf,Nfrac,nTests,test_set_fraction,plotResults=False, impute_scale=False, parallel= parall)
+#Version diminuée
+parameters=[
+           { "learning_rate" : [0.1] , "min_child_weight" : [5,10], "max_depth" : [3,6,10],
+             "gamma" : [0,1] , "subsample":[0.5,1] , "colsample_bytree" : [0.5,0.7], "reg_lambda" : [0],
+             "scale_pos_weight" : [20,100]
+            }
+           ]
+           
+
+results, bestEstim =multiGridSearch(trainPath,classifiers,classNames, parameters,skf3,Nfrac,nTests,test_set_fraction,plotResults=False, impute_scale=False, parallel= parall)
 #results, bestClf = clfSearch(trainPath, classifiers, classNames, Nfrac, nTests, test_set_fraction,impute_scale = True)
 
 

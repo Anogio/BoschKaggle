@@ -4,6 +4,7 @@
 from pandas import *
 from numpy import *
 from scipy import *
+import numpy as np
 try:
     from matplotlib import *
     from matplotlib.pyplot import plot, show
@@ -47,6 +48,17 @@ def importData_chunks(filename, N_fraction=0.05, test_fraction=0.2, split= True)
         return X_train, y_train, X_test, y_test, test_id
     else:
         return X, y 
+
+def importAll(numFile,dateFile,dateNames,catFile=None,cat=False,Nfrac=0.05,test_fraction=0.2):
+    numChunks=read_csv(numFile,chunksize=50000,dtype=np.float32)
+    names=read_csv(dateNames).values
+    dateChunks= read_csv(dateFile,chunksize=50000, dtype=np.float32, usecols=names)
+    if(cat):
+        catChunks = read_csv(catFile, chunksize=50000,dtype=int)
+        data= concat([concat([nc,dc,cc.drop("Id",axis=1)],axis=1).sample(frac=Nfrac).to_sparse() for nc,dc,cc in zip(numChunks,dateChunks,catChunks)])
+    else:
+        data= concat([concat([nc,dc],axis=1).sample(frac=Nfrac).to_sparse() for nc,dc in zip(numChunks,dateChunks)])
+    
 
 def imputeAndScale(X_train,X_test):
     imp= Imputer()
@@ -136,6 +148,8 @@ def multiGridSearch(filename,classifiers,classNames, parameters, crossVal, Nfrac
                 y_pred= GridSearch(clf, X_train, y_train, X_test)
                 print(y_pred.shape)
                 perf = evaluate(y_pred,y_test)
+                if(className == "SGB"):
+                    print(clf.feature_importances)
                 results.append(perf)
             if perf > best:
                 bestEstim = clf

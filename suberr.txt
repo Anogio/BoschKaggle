@@ -1,0 +1,28 @@
+/home/ogier/.local/lib/python3.5/site-packages/sklearn/cross_validation.py:44: DeprecationWarning: This module was deprecated in version 0.18 in favor of the model_selection module into which all the refactored classes and functions are moved. Also note that the interface of the new CV iterators are different from that of this module. This module will be removed in 0.20.
+  "This module will be removed in 0.20.", DeprecationWarning)
+Traceback (most recent call last):
+  File "make_submission.py", line 103, in <module>
+    res["Response"]=y.iloc[:,0]
+  File "/usr/lib64/python3.5/site-packages/pandas/core/frame.py", line 2348, in __setitem__
+    self._set_item(key, value)
+  File "/usr/lib64/python3.5/site-packages/pandas/core/frame.py", line 2414, in _set_item
+    value = self._sanitize_column(key, value)
+  File "/usr/lib64/python3.5/site-packages/pandas/core/frame.py", line 2551, in _sanitize_column
+    value = reindexer(value)
+  File "/usr/lib64/python3.5/site-packages/pandas/core/frame.py", line 2543, in reindexer
+    raise e
+  File "/usr/lib64/python3.5/site-packages/pandas/core/frame.py", line 2538, in reindexer
+    value = value.reindex(self.index).values
+  File "/usr/lib64/python3.5/site-packages/pandas/core/series.py", line 2344, in reindex
+    return super(Series, self).reindex(index=index, **kwargs)
+  File "/usr/lib64/python3.5/site-packages/pandas/core/generic.py", line 2226, in reindex
+    fill_value, copy).__finalize__(self)
+  File "/usr/lib64/python3.5/site-packages/pandas/core/generic.py", line 2244, in _reindex_axes
+    copy=copy, allow_dups=False)
+  File "/usr/lib64/python3.5/site-packages/pandas/core/generic.py", line 2338, in _reindex_with_indexers
+    copy=copy)
+  File "/usr/lib64/python3.5/site-packages/pandas/core/internals.py", line 3521, in reindex_indexer
+    self.axes[axis]._can_reindex(indexer)
+  File "/usr/lib64/python3.5/site-packages/pandas/indexes/base.py", line 2208, in _can_reindex
+    raise ValueError("cannot reindex from a duplicate axis")
+ValueError: cannot reindex from a duplicate axis
