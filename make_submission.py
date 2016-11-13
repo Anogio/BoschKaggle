@@ -15,8 +15,15 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing.data import StandardScaler
 from sklearn.preprocessing import Imputer
 from sklearn.model_selection import StratifiedKFold
-
+from random import randint
+from time import *
 import sys
+
+t0=time()
+
+
+frac=0.2
+rst=randint(0,2000)
 
 gc.collect()
 #Prepare classifier
@@ -24,21 +31,26 @@ gc.collect()
 clfa=XGBClassifier()
 clfb=RandomForestClassifier(class_weight="balanced")
 scorer=make_scorer(matthews_corrcoef)
-skf3 = StratifiedKFold(n_splits=2)
+skf = StratifiedKFold(n_splits=3)
+skf5= StratifiedKFold(n_splits=3)
+
 
 parametersa=[
-           { "learning_rate" : [0.1] , "min_child_weight" : [5,10], "max_depth" : [3,6,10],
-             "gamma" : [0] , "subsample":[0.5,1] , "colsample_bytree" : [0.7], "reg_lambda" : [0,1],
-             "scale_pos_weight" : [1,20,100]
-            }
+           { "learning_rate" : [0.05] , "min_child_weight" : [1,3], "max_depth" : [3,6,10],
+             "gamma" : [0,0.5] , "subsample":[0.5,1] , "colsample_bytree" : [0.7], "reg_lambda" : [0,0.5],
+             "scale_pos_weight" : [0.5,1,3]
+             }
             ]
-#parametersb=[
-#             {"max_features": [None, 20,45, 65],"n_estimators":[20], "min_samples_leaf":[1,35,60], "min_samples_split" : [2,5,10], "max_leaf_nodes":[None, 3,20]}    
-#            ]
-#           
-#           
-clf1=GridSearchCV(clfa,parametersa,scoring=scorer,cv=skf3,verbose=1)
-#clf2=GridSearchCV(clfb,parametersb,scoring=scorer,cv=skf3,verbose=1)
+parametersb=[
+             {"max_features": [None, 'sqrt',40],"n_estimators":[200], "min_samples_leaf":[1,5,30], "max_leaf_nodes":[None, 3,20]}    
+            ]
+           
+parametersa= [{"learning_rate" : [0.1]} ]
+parametersb= [{"n_estimators":[20], "max_features":['sqrt','0.2']}]    
+           
+           
+clf1=GridSearchCV(clfa,parametersa,scoring=scorer,cv=skf,verbose=1)
+clf2=GridSearchCV(clfb,parametersb,scoring=scorer,cv=skf5,verbose=1,n_jobs=-1,pre_dispatch='n_jobs')
 
 #Import column filters
 dateCols= read_csv("train_date_colnames")["0"].values
@@ -46,71 +58,173 @@ catCols= read_csv("train_categorical_colnames")["0"].values
 #Import lines filter for Train
 uselines= read_csv(linesTrainPath)["0"].values
 
-#Numeric data
+delta=gmtime(time() - t0)
+tstr=strftime('%H:%M:%S',delta)
+print("Time since beginning:%s" % tstr)
+
+# Numeric data
 print("Importing numeric data")
 dataTrain = read_csv(trainPath,dtype=np.float16)
+ids=read_csv(trainPath,usecols=["Id"])["Id"]
+dataTrain["Id"]=ids
+del ids
+dataTrain=dataTrain.sample(frac=frac,random_state=rst)
 print(dataTrain.shape)
 #Extract responses
-y=read_csv(trainPath,usecols=["Response"])["Response"]
-dataTrain["Response"]=y
+y=read_csv(trainPath,usecols=["Response"]).sample(frac=frac,random_state=rst)["Response"]
+
+
+n_num_feat=dataTrain.shape[1]-2
 
 #Add date features
 print("Importing features")
-dataTrain= concat([dataTrain,read_csv(featTrainPath,usecols=["Min","Max","Diff","Evol"],dtype=np.float32)],axis=1)
-print(dataTrain)
+dataTrain= concat([dataTrain,read_csv(featTrainPath,usecols=["Min","Max","Diff","Evol"]).sample(frac=frac,random_state=rst)],axis=1)
 print(dataTrain.shape)
+n_new_feat=dataTrain.shape[1]-2-n_num_feat
 #Add date data
 print("Importing date data")
-dataTrain = concat([dataTrain,read_csv(dateTrainPath,dtype=np.float16, usecols= dateCols)],axis=1,copy=False)
+dataTrain = concat([dataTrain,read_csv(dateTrainPath,dtype=np.float16, usecols= dateCols).sample(frac=frac,random_state=rst)],axis=1,copy=False)
 gc.collect()
-print(dataTrain)
 print(dataTrain.shape)
+n_date_feat= dataTrain.shape[1]-2-n_num_feat - n_new_feat
 #Add categorical data
 print("Importing categorical data")
-##dataTrain = concat([dataTrain,read_csv(catTrainPath,dtype=np.int16,usecols=catCols)],axis=1,copy=False)
-##print(dataTrain)
-##print(dataTrain.shape)
-print("Removing useless rows")
-dataTrain=dataTrain.ix[uselines].sample(frac=0.3, random_state=0)
-gc.collect()
+dataTrain = concat([dataTrain,read_csv(catTrainPath,dtype=np.float16,usecols=catCols).replace([np.inf, -np.inf], -1).sample(frac=frac,random_state=rst)],axis=1,copy=False)
+n_cat_feat = dataTrain.shape[1]-2-n_num_feat - n_new_feat - n_date_feat
+
+
+print("Number of columns for each category:")
+print([n_num_feat,n_new_feat,n_date_feat,n_cat_feat])
+
+print(dataTrain)
 print(dataTrain.shape)
 
-#Drop response and Id
-y=dataTrain["Response"]
-dataTrain=dataTrain.drop("Response",axis=1)
-dataTrain=dataTrain.drop("Id",axis=1)
+gc.collect()
 
-#Fit classifier than can handle NaN
+#Drop response and Id
+dataTrain=dataTrain.drop("Id",axis=1)
+dataTrain=dataTrain.drop("Response",axis=1)
+
+print("y size:")
+print(y.shape)
+print("Number of positives:")
+print(len(np.where(y.values==1)[0]))
+
+delta=gmtime(time() - t0)
+tstr=strftime('%H:%M:%S',delta)
+print("Time since beginning:%s" % tstr)
+
+
+#Fit classifier to find best columns
 print("Fitting")
 clf1.fit(dataTrain,y)
+bestPar= clf1.best_params_
+print("Best parameters:%s" % bestPar)
+
+clf1= XGBClassifier(**bestPar)
+clf1.fit(dataTrain,y)
+
+delta=gmtime(time() - t0)
+tstr=strftime('%H:%M:%S',delta)
+print("Time since beginning:%s" % tstr)
+
+important_indices = np.where(clf1.feature_importances_>0)[0]
+print(dataTrain.columns.values[important_indices])
+DataFrame(dataTrain.columns.values[important_indices]).to_csv("important_columns.csv")
+print("Number of important columns:")
+print(len(important_indices))
+
+allCols= dataTrain.columns.values
+
+del dataTrain
+gc.collect()
+
+numCols = allCols[important_indices[important_indices<n_num_feat]]
+dateCols = allCols[important_indices[(important_indices<n_num_feat + n_new_feat + n_date_feat) & (important_indices>= n_num_feat + n_new_feat) ]]
+catCols = allCols[important_indices[important_indices>= n_num_feat + n_new_feat + n_date_feat]]
+
+print("Best columns selected. Now fitting for prediction")
+lTot=len(dateCols)+len(numCols)+len(catCols) + 4
+print("Selecting %d columns" % lTot)
+
+####### Importing again just the important columns and refitting ######
+#Numeric data
+print("Importing numeric data")
+dataTrain = read_csv(trainPath,dtype=np.float32,usecols=numCols)
+print(dataTrain.shape)
+#Extract responses
+y=read_csv(trainPath,usecols=["Response"])["Response"]
+
+n_num_feat=dataTrain.shape[1]-2
+
+#Add date features
+print("Importing features")
+dataTrain= concat([dataTrain,read_csv(featTrainPath,usecols=["Min","Max","Diff","Evol"])],axis=1)
+print(dataTrain.shape)
+n_new_feat=dataTrain.shape[1]-2-n_num_feat
+#Add date data
+print("Importing date data")
+dataTrain = concat([dataTrain,read_csv(dateTrainPath,dtype=np.float32, usecols= dateCols)],axis=1,copy=False)
+gc.collect()
+print(dataTrain.shape)
+n_date_feat= dataTrain.shape[1]-2-n_num_feat - n_new_feat
+#Add categorical data
+print("Importing categorical data")
+dataTrain = concat([dataTrain,read_csv(catTrainPath,usecols=catCols).replace([np.inf, -np.inf], -1)],axis=1,copy=False)
+n_cat_feat = dataTrain.shape[1]-2-n_num_feat - n_new_feat - n_date_feat
+
+print(dataTrain.shape)
+print("Number of columns for each category:")
+print([n_num_feat,n_new_feat,n_date_feat,n_cat_feat])
+
+print("Used columns")
+print(dataTrain.columns.values)
+DataFrame(dataTrain.columns.values).to_csv("used_columns_check.csv")
+
+delta=gmtime(time() - t0)
+tstr=strftime('%H:%M:%S',delta)
+print("Time since beginning:%s" % tstr)
+
+print("Fitting")
+clf1=GridSearchCV(clfa,parametersa,scoring=scorer,cv=skf5,verbose=1)
+
+clf1.fit(dataTrain,y)
+
+delta=gmtime(time() - t0)
+tstr=strftime('%H:%M:%S',delta)
+print("Time since beginning:%s" % tstr)
 
 # Scale data
 print("Scaling")
-#scaler=StandardScaler
-#imputer=Imputer()
-#dataTrain=imputer.fit_transform(dataTrain)
-#dataTrain=scaler.fit_transform(dataTrain)
+scaler=StandardScaler()
+imputer=Imputer()
+dataTrain=imputer.fit_transform(dataTrain)
+dataTrain=scaler.fit_transform(dataTrain)
 
 #Fit classifier that needs imputation
 print("Fitting")
-#clf2.fit(dataTrain,y)
+clf2.fit(dataTrain,y)
 
 print("Fit completed")
-#Remove useless data to free RAM
+
+delta=gmtime(time() - t0)
+tstr=strftime('%H:%M:%S',delta)
+print("Time since beginning:%s" % tstr)
+
+#Remove useless data to free up RAM
 del dataTrain
 del y
 gc.collect()
 #Import numeric data
 print("Importing numeric data")
-dataTest = read_csv(testPath,dtype=np.float16)
-
+dataTest = read_csv(testPath,dtype=np.float16,usecols=numCols)
+print(dataTest.shape)
 #Isolate ids for end submission
 ids=read_csv(testPath,usecols=["Id"])["Id"]
-dataTest=dataTest.drop("Id",axis=1)
 
 #Add date features
 print("Importing features")
-dataTest= concat([dataTest,read_csv(featTestPath,usecols=["Min","Max","Diff","Evol"],dtype=np.float16)],axis=1)
+dataTest= concat([dataTest,read_csv(featTestPath,usecols=["Min","Max","Diff","Evol"])],axis=1)
 print(dataTest.shape)
 #Add date data
 print("Importing date data")
@@ -118,10 +232,17 @@ dataTest = concat([dataTest,read_csv(dateTestPath,dtype=np.float16, usecols= dat
 print(dataTest.shape)
 #Add categorical data
 print("Importing categorical data")
-##dataTest = concat([dataTest,read_csv(catTestPath,dtype=np.int16,usecols=catCols)],axis=1,copy=False)
-#print(dataTrain.shape)
+dataTest = concat([dataTest,read_csv(catTestPath,usecols=catCols).replace([np.inf, -np.inf], -1)],axis=1,copy=False)
+print(dataTest.shape)
+
+delta=gmtime(time() - t0)
+tstr=strftime('%H:%M:%S',delta)
+print("Time since beginning:%s" % tstr)
+
 #Make prediction
 print("Predicting")
+
+"""
 bounds=[0,200000,400000,600000,800000,1000000,len(ids)]
 preds=[]
 for i in range(6):
@@ -135,20 +256,24 @@ y=concat(preds,axis=0,copy=False)
 del dataTest
 del preds
 print(y.shape)
+"""
+y=DataFrame(clf1.predict(dataTest))
 print("Prediction done")
+
 res=DataFrame(np.nan, index = range(len(ids)), columns = ["Id","Response"])
 res["Id"]=ids
 res["Response"]=y.values
 
 res.to_csv("submission1.csv",index=False)
 
-sys.exit("Fini")
 
 #Scale
 print("Scaling")
 dataTest=imputer.transform(dataTest)
 dataTest=scaler.transform(dataTest)
 
+print("Predicting")
+"""
 preds=[]
 for i in range(6):
     dtest=dataTest.ix[range(bounds[i],bounds[i+1])]
@@ -158,16 +283,22 @@ for i in range(6):
     gc.collect()
 print(preds)
 y=concat(preds,axis=0,copy=False)
-##y_pred2=clf2.predict(dataTest)
+
 del dataTest
 del preds
 print(y.shape)
+"""
+y=DataFrame(clf2.predict(dataTest))
 print("Prediction done")
+
 res=DataFrame(np.nan, index = range(len(ids)), columns = ["Id","Response"])
 res["Id"]=ids
 res["Response"]=y.values
 
 res.to_csv("submission2.csv",index=False)
 
-##res["Response"]=y_pred2
-##res.to_csv("submission2.csv")
+print("Finished")
+
+delta=gmtime(time() - t0)
+tstr=strftime('%H:%M:%S',delta)
+print("Time since beginning:%s" % tstr)

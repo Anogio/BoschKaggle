@@ -26,8 +26,3 @@ print("Nouveau nombre de colonnes:%d" % len(newNames))
 
 DataFrame(newNames).to_csv("train_categorical_colnames")
 
-colNames= read_csv("train_categorical_colnames")["0"].values
-cat= read_csv(catTrainPath,dtype=np.float16,usecols=colNames)
-        
-max=cat.max()
-newCols = cat.columns.values[np.where(max<200)]
