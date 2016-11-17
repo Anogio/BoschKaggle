@@ -139,7 +139,13 @@ tstr=strftime('%H:%M:%S',delta)
 print("Time since beginning:%s" % tstr)
 
 important_indices = np.where(clf1.feature_importances_>0)[0]
+scores = clf1.feature_importances_[important_indices]
+order = np.argsort(scores)
 print(dataTrain.columns.values[important_indices])
+print("Scores:")
+print(scores)
+print("Sorted importances:")
+print(dataTrain.columns.values[important_indices][order])
 DataFrame(dataTrain.columns.values[important_indices]).to_csv("important_columns.csv")
 print("Number of important columns:")
 print(len(important_indices))
@@ -154,7 +160,7 @@ dateCols = allCols[important_indices[(important_indices<n_num_feat + n_new_feat 
 catCols = allCols[important_indices[important_indices>= n_num_feat + n_new_feat + n_date_feat]]
 
 print("Best columns selected. Now fitting for prediction")
-lTot=len(dateCols)+len(numCols)+len(catCols) + 4
+lTot=len(dateCols)+len(numCols)+len(catCols) + 4 + 6
 print("Selecting %d columns" % lTot)
 
 ####### Importing again just the important columns and refitting ######
