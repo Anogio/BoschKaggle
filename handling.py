@@ -1,15 +1,11 @@
 ﻿# coding: utf-8
 #Autorise les accents dans les commentaires
 
-from pandas import *
-from numpy import *
-from scipy import *
 import numpy as np
-try:
-    from matplotlib import *
-    from matplotlib.pyplot import plot, show
-except ImportError :
-    print("Not importing matplotlib")
+import random
+
+from pandas import read_csv, concat
+from numpy import linspace
 from sklearn.preprocessing.data import StandardScaler
 from sklearn.preprocessing import Imputer
 from sklearn.metrics.scorer import make_scorer
@@ -58,6 +54,7 @@ def importAll(numFile,dateFile,dateNames,catFile=None,cat=False,Nfrac=0.05,test_
         data= concat([concat([nc,dc,cc.drop("Id",axis=1)],axis=1).sample(frac=Nfrac).to_sparse() for nc,dc,cc in zip(numChunks,dateChunks,catChunks)])
     else:
         data= concat([concat([nc,dc],axis=1).sample(frac=Nfrac).to_sparse() for nc,dc in zip(numChunks,dateChunks)])
+    return data
     
 
 def imputeAndScale(X_train,X_test):
@@ -160,9 +157,6 @@ def multiGridSearch(filename,classifiers,classNames, parameters, crossVal, Nfrac
             del y_test
        
         allResults.append(results)
-        if plotResults:
-            plot(linspace(1,nTests,nTests),results)
-            show()
         print("_" * 10)
         print("\n"*5)
     print("Best results overall:")
@@ -175,7 +169,6 @@ def clfSearch(filename, classifiers, classNames, Nfrac, nTests, test_set_fractio
     allResults=[]
     best=0
     bestEstim= None
-    bestEstimName=None
     print("Classifier evaluation on Nfrac=%s" % Nfrac)
     print("_" * 10)
     print("\n"*5)
@@ -200,7 +193,6 @@ def clfSearch(filename, classifiers, classNames, Nfrac, nTests, test_set_fractio
             results.append(perf)
             if perf > best:
                     bestEstim = classif
-                    bestEstimName=className
             del X_test
             del X_train
             del y_train
@@ -212,7 +204,7 @@ def clfSearch(filename, classifiers, classNames, Nfrac, nTests, test_set_fractio
     
     
 def test_feature(X_array, y_array, feature_array, classifier,nRows, n_tests, testSize):
-    concat_array = concatenate((data_array,feature_array),axis=1)
+    concat_array = concat([X_array,feature_array],axis=1)
     perfWithout=[]
     perfWith=[]
     diff=[]
@@ -256,16 +248,8 @@ def test_feature(X_array, y_array, feature_array, classifier,nRows, n_tests, tes
         
 
     
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+def writeDict(dic,outfile):
+    out= open(outfile,'w')
+    towrite= str(dic)
+    out.write(towrite)
+    out.close()
