@@ -1,1 +1,1 @@
-{'n_estimators': [200], 'min_samples_leaf': [1, 5, 30], 'max_leaf_nodes': [None, 3, 20], 'max_features': [None, 'sqrt', 'log2']}
+{'max_leaf_nodes': [None, 3, 20], 'min_samples_leaf': [1, 5, 30], 'max_features': [None, 'sqrt', 'log2'], 'n_estimators': [20]}

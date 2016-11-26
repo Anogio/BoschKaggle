@@ -5,7 +5,7 @@ Created on Sat Nov  5 15:56:42 2016
 @author: ogier
 """
 
-from globalVar import trainPath ,dateTrainPath,catTrainPath,testPath,dateTestPath,catTestPath,featTrainPath, linesTrainPath , featStationTrainPath , featTestPath , featStationTestPath
+from globalVar import trainPath ,dateTrainPath,catTrainPath,testPath,dateTestPath,catTestPath,featTrainPath, linesTrainPath , featStationTrainPath , featTestPath , featStationTestPath, featNames,newFeaturesTrainPath,newFeaturesTestPath 
 from handling import writeDict
 
 import gc as gc
@@ -24,6 +24,12 @@ from pandas import read_csv, concat, DataFrame
 
 t0=time()
 
+bestParamXGB1 = {'learning_rate': 0.05, 'max_depth': 6, 'colsample_bytree': 0.7, 'min_child_weight': 1, 'subsample': 0.5, 'gamma': 0.5, 'reg_lambda': 0, 'scale_pos_weight': 3}
+bestParamXGB2 = {'learning_rate': 0.05, 'max_depth': 6, 'colsample_bytree': 0.7, 'min_child_weight': 1, 'subsample': 1, 'gamma': 0.5, 'reg_lambda': 0, 'scale_pos_weight': 3}
+bestParamRF={}
+gridSearchXGB1 = False
+gridSearchXGB2 = False
+gridSearchRF = False
 
 frac=0.2
 rst=randint(0,2000)
@@ -45,7 +51,7 @@ parametersa=[
              }
             ]
 parametersb=[
-             {"max_features": [None, 'sqrt',"log2"],"n_estimators":[200], "min_samples_leaf":[1,5,30], "max_leaf_nodes":[None, 3,20]}    
+             {"max_features": [None, 'sqrt',"log2"],"n_estimators":[20], "min_samples_leaf":[1,5,30], "max_leaf_nodes":[None, 3,20]}    
             ]
            
 #parametersa= [{"learning_rate" : [0.1]} ]
@@ -90,6 +96,10 @@ dataTrain= concat([dataTrain,read_csv(featStationTrainPath,usecols=["NbFeats", "
 print(dataTrain.shape)
 n_new_feat += 6
 
+for name in featNames :
+    dataTrain= concat([dataTrain,read_csv(newFeaturesTrainPath+name+".csv",usecols=[name])],axis=1)
+    n_new_feat+=1
+
 #Add date data
 print("Importing date data")
 dataTrain = concat([dataTrain,read_csv(dateTrainPath,dtype=np.float16, usecols= dateCols).sample(frac=frac,random_state=rst)],axis=1,copy=False)
@@ -123,13 +133,18 @@ delta=gmtime(time() - t0)
 tstr=strftime('%H:%M:%S',delta)
 print("Time since beginning:%s" % tstr)
 
-
-#Fit classifier to find best columns
-print("Fitting")
-clf1.fit(dataTrain,y)
-bestPar= clf1.best_params_
-writeDict(str(bestPar),"dict1XGB.txt")
-print("Best parameters:%s" % bestPar)
+if(gridSearchXGB1):
+    #Fit classifier to find best columns
+    print("Fitting")
+    clf1.fit(dataTrain,y)
+    bestPar= clf1.best_params_
+    writeDict(str(bestPar),"dict1XGB.txt")
+    print("Best parameters:%s" % bestPar)
+    
+else:
+    bestPar = bestParamXGB1
+    print("Using those parameters for feature selection:")
+    print(str(bestPar))
 
 clf1= XGBClassifier(**bestPar)
 clf1.fit(dataTrain,y)
@@ -183,6 +198,11 @@ dataTrain= concat([dataTrain,read_csv(featStationTrainPath,usecols=["NbFeats", "
 print(dataTrain.shape)
 n_new_feat +=6
 
+for name in featNames :
+    dataTrain= concat([dataTrain,read_csv(newFeaturesTrainPath+name+".csv",usecols=[name])],axis=1)
+    n_new_feat+=1
+        
+
 #Add date data
 print("Importing date data")
 dataTrain = concat([dataTrain,read_csv(dateTrainPath,dtype=np.float32, usecols= dateCols)],axis=1,copy=False)
@@ -207,11 +227,15 @@ tstr=strftime('%H:%M:%S',delta)
 print("Time since beginning:%s" % tstr)
 
 print("Fitting")
-clf1=GridSearchCV(clfa,parametersa,scoring=scorer,cv=skf5,verbose=2)
-
-clf1.fit(dataTrain,y)
-bestPar2= clf1.best_params_
-writeDict(str(bestPar2),"dict2XGB.txt")
+if(gridSearchXGB2):
+    clf1=GridSearchCV(clfa,parametersa,scoring=scorer,cv=skf5,verbose=2)
+    
+    clf1.fit(dataTrain,y)
+    bestPar2= clf1.best_params_
+    writeDict(str(bestPar2),"dict2XGB.txt")
+else : 
+    clf1 = XGBClassifier(**bestParamXGB2)
+    clf1.fit(dataTrain,y)
 
 
 
@@ -228,9 +252,13 @@ dataTrain=scaler.fit_transform(dataTrain)
 
 #Fit classifier that needs imputation
 print("Fitting")
-clf2.fit(dataTrain,y)
-bestPar2= clf2.best_params_
-writeDict(str(bestPar2),"dictRF.txt")
+if(gridSearchRF):
+    clf2.fit(dataTrain,y)
+    bestPar2= clf2.best_params_
+    writeDict(str(bestPar2),"dictRF.txt")
+else:
+    clf2 = XGBClassifier(**bestParamRF)
+    clf2.fit(dataTrain,y)
 
 print("Fit completed")
 
@@ -256,6 +284,10 @@ print(dataTest.shape)
 
 dataTest= concat([dataTest,read_csv(featStationTestPath,usecols=["NbFeats", "Station1","StationLast","NbStations","PathDupe","PathNoDupe"])],axis=1)
 print(dataTest.shape)
+
+for name in featNames :
+    dataTest= concat([dataTest,read_csv(newFeaturesTestPath+name+".csv",usecols=[name])],axis=1)
+    n_new_feat+=1
 #Add date data
 print("Importing date data")
 dataTest = concat([dataTest,read_csv(dateTestPath,dtype=np.float16, usecols= dateCols)],axis=1,copy=False)
